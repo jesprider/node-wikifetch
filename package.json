@@ -2,9 +2,9 @@
   "name": "node-wikifetch",
   "version": "1.0.0",
   "description": "A small utility which helps make requests to wikipedia api easily.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node example.js"
   },
   "author": "Roman Alekseev",
   "license": "ISC"

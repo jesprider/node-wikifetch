@@ -1,6 +1,6 @@
 {
   "name": "node-wikifetch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small utility which helps make requests to wikipedia api easily.",
   "main": "src/index.js",
   "scripts": {

@@ -5,10 +5,14 @@ A small utility which helps make wikipedia api requests easily.
 * Node.js > 6.9
 * No external dependencies
 
-## How to use
+## How to install
+```bash
+npm install node-wikifetch --save
+```
 
+## How to use
 ```javascript
-const wikifetch = require('wikifetch');
+const wikifetch = require('node-wikifetch');
 
 wikifetch('action=query&format=json&prop=extracts&exintro=1&titles=nodejs', (data) => {
     console.log(data);

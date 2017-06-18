@@ -1,15 +1,15 @@
 const https = require('https');
 
-const config = {
-    host: 'en.wikipedia.org',
-    path: '/w/api.php?',
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-};
-
 const makeRequest = (query, cb) => {
+    const config = {
+        host: 'en.wikipedia.org',
+        path: '/w/api.php?',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
     if (!query || typeof query !== 'string') {
         throw new Error('Wrong parameter type for query: string expected.');
     }
@@ -26,8 +26,12 @@ const makeRequest = (query, cb) => {
         res.on('data', (chunk) => {
             body.push(chunk);
         }).on('end', () => {
+            if (Buffer.concat(body).toString().charAt(0) === '<') {
+                cb(new Error(Buffer.concat(body).toString()), null);
+                return;
+            }
             const parsedBody = JSON.parse(Buffer.concat(body).toString());
-            cb(parsedBody);
+            cb(null, parsedBody);
         })
     });
 

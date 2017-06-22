@@ -6,6 +6,10 @@
   "scripts": {
     "test": "node example.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jesprider/node-wikifetch.git"
+  },
   "keywords": ["wikipedia", "api", "wikifetch", "fetch", "http request"],
   "author": "Roman Alekseev",
   "license": "ISC"

@@ -6,6 +6,35 @@ const cities = [
     {"id":5128581,"name":"New York City","asciiname":"New York City","lat":"40.71427","lng":"-74.00597","countryCode":"US","population":8175133,"elevation":10,"timeZone":"57"}
 ];
 
+//
+// Object request example:
+wikifetch({
+    action: 'query',
+    format: 'json',
+    prop: 'extracts',
+    exintro: 1,
+    redirects: 1,
+    titles: cities[0].asciiname
+}, (err, data) => {
+    for (const key in data.query.pages) {
+        console.log('Object request:\n');
+        console.log(data.query.pages[key].extract + '\n\n');
+    }
+    request();
+});
+
+//
+// String request example:
+wikifetch('action=query&format=json&prop=extracts&exintro=1&redirects=1&titles=' + cities[0].asciiname.split(' ').join('+'), (err, data) => {
+    for (const key in data.query.pages) {
+        console.log('String request:\n');
+        console.log(data.query.pages[key].extract + '\n\n');
+    }
+    request();
+});
+
+//
+// Recursion example:
 const iterator = cities.entries();
 
 const request = () => {
@@ -13,9 +42,9 @@ const request = () => {
 
     if (value) {
         const cityName = value[1].asciiname.split(' ').join('+');
-        console.log(cityName + '\n');
-        wikifetch('action=query&format=json&prop=extracts&exintro=1&redirects=1&titles=' + cityName, (data) => {
+        wikifetch('action=query&format=json&prop=extracts&exintro=1&redirects=1&titles=' + cityName, (err, data) => {
             for (const key in data.query.pages) {
+                console.log(cityName + '\n');
                 console.log(data.query.pages[key].extract + '\n\n');
             }
             request();

@@ -1,37 +1,59 @@
 const https = require('https');
 
-const makeRequest = (query, cb) => {
-    const config = {
-        host: 'en.wikipedia.org',
-        path: '/w/api.php?',
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-
-    if (!query || typeof query !== 'string') {
-        throw new Error('Wrong parameter type for query: string expected.');
+const config = {
+    host: 'en.wikipedia.org',
+    path: '/w/api.php?',
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
     }
-    query = query.trim();
+};
 
-    if (query[0] === '?') {
+const handleStringQuery = (query) => {
+    const path = query.trim();
+    if (path[0] === '?') {
         throw new Error('Question mark is not allowed in the query.');
     }
+    return path;
+};
 
-    config.path = config.path + query;
-    const body = [];
+const handleObjectQuery = (query) => {
+    const path = [];
+    if (query.titles) {
+        query.titles = query.titles.split(' ').join('+');
+    }
+    Object.keys(query).forEach((key) => {
+        path.push(`${key}=${query[key]}`);
+    });
+    return path.join('&');
+};
 
-    const req = https.request(config, (res) => {
+const wikifetch = (query, cb) => {
+    if (typeof cb !== 'function') {
+        throw new Error('Wrong parameter type for callback: function expected.');
+    }
+
+    let path = null;
+
+    if (typeof query === 'string') {
+        path = handleStringQuery(query);
+    } else if (typeof query === 'object') {
+        path = handleObjectQuery(query);
+    } else {
+        throw new Error('Wrong parameter type for query: string or object expected.');
+    }
+
+    const partials = [];
+    const req = https.request(Object.assign({}, config, { path: config.path + path }), (res) => {
         res.on('data', (chunk) => {
-            body.push(chunk);
+            partials.push(chunk);
         }).on('end', () => {
-            if (Buffer.concat(body).toString().charAt(0) === '<') {
-                cb(new Error(Buffer.concat(body).toString()), null);
+            const body = Buffer.concat(partials).toString();
+            if (body.charAt(0) === '<') {
+                cb(new Error(body), null);
                 return;
             }
-            const parsedBody = JSON.parse(Buffer.concat(body).toString());
-            cb(null, parsedBody);
+            cb(null, JSON.parse(body));
         })
     });
 
@@ -42,4 +64,4 @@ const makeRequest = (query, cb) => {
     req.end();
 };
 
-module.exports = makeRequest;
+module.exports = wikifetch;

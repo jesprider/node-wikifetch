@@ -13,16 +13,47 @@ npm install node-wikifetch --save
 ## How to use
 ```javascript
 const wikifetch = require('node-wikifetch');
-
-wikifetch('action=query&format=json&prop=extracts&exintro=1&titles=nodejs', (err, data) => {
+ 
+// Using sring query
+wikifetch('action=query&format=json&prop=extracts&exintro=1&redirects=1&titles=nodejs', (err, data) => {
     if (err) {
-        // handle an error here
+        // handle an error here 
+    }
+    console.log(data);
+});
+
+// Using object query
+wikifetch({
+    action: 'query',
+    format: 'json',
+    prop: 'extract',
+    exintro: '1',
+    redirects: '1',
+    titles: 'nodejs'
+}, (err, data) => {
+    if (err) {
+        // handle an error here 
     }
     console.log(data);
 });
 ```
 
-Wikifetch takes 2 parameters:
+## Wikifetch api
 
-* `query` _string_: query for mediawiki api [https://www.mediawiki.org/wiki/API:Main_page](https://www.mediawiki.org/wiki/API:Main_page)
-* `cb` _function_: callback function with error as the first argument and data received from wikipedia as the second
+### wikifetch(query, callback)
+
+* `query` \<String | Object\>
+* `cb` \<Function\>
+
+A query is either a string or an object that would be translated to a string for [mediawiki api](https://www.mediawiki.org/wiki/API:Main_page).
+A callback is a function with an error as the first argument and the data received from wikipedia as the second.
+
+## Example
+To execute an example and to see a sample output type
+```bash
+node example.js
+```
+
+## Links
+* [Mediawiki API](https://www.mediawiki.org/wiki/API:Main_page)
+* [API Sandbox](https://www.mediawiki.org/wiki/Special:ApiSandbox)

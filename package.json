@@ -12,5 +12,9 @@
   },
   "keywords": ["wikipedia", "api", "wikifetch", "fetch", "http request"],
   "author": "Roman Alekseev",
-  "license": "ISC"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jesprider/node-wikifetch/issues"
+  },
+  "homepage": "https://github.com/jesprider/node-wikifetch#readme"
 }
